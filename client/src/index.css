@@ -1,0 +1,201 @@
+/* Import monospaced font that resembles Bloomberg Terminal */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-size: 14px; /* Standardized base font size for terminal look */
+    -webkit-font-smoothing: none; /* Pixelated fonts for terminal look */
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-black text-[#F5F5F5] tracking-tighter leading-tight; 
+    font-family: 'Roboto Mono', monospace;
+    letter-spacing: -0.05em;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+  }
+
+  /* Global font size standardization */
+  p, span, div, a, button, input, select, textarea, li {
+    font-size: 14px !important; /* Force consistent font size across all elements */
+  }
+
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 45 100% 50%;
+    
+    --card: 0 0% 5%;
+    --card-foreground: 45 100% 50%;
+    
+    --popover: 0 0% 0%;
+    --popover-foreground: 45 100% 50%;
+    
+    --primary: 45 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 45 100% 50%;
+    
+    --muted: 0 0% 15%;
+    --muted-foreground: 45 100% 40%;
+    
+    --accent: 45 100% 60%;
+    --accent-foreground: 0 0% 0%;
+    
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 45 100% 50%;
+    
+    --border: 45 100% 50%;
+    --input: 45 100% 50%;
+    --ring: 45 100% 50%;
+
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 45 100% 50%;
+    --sidebar-primary: 45 100% 50%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 210 100% 50%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 45 100% 50%;
+    --sidebar-ring: 45 100% 50%;
+
+    --chart-1: 45 100% 50%;
+    --chart-2: 0 0% 80%;
+    --chart-3: 0 100% 50%;
+    --chart-4: 120 100% 50%;
+    --chart-5: 210 100% 50%;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333333;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FFBF00;
+}
+
+/* Custom terminal-specific styles */
+.terminal-header {
+  @apply bg-black border-b border-[#FFBF00] font-bold;
+}
+
+.terminal-action-button {
+  @apply px-2 py-0.5 font-mono;
+}
+
+.terminal-section-header {
+  @apply bg-[#121212] px-3 py-1 text-white font-bold tracking-tight;
+  margin-top: 2px;
+}
+
+.news-item {
+  @apply px-3 py-0.5 flex hover:bg-[#1a1a1a] cursor-pointer leading-tight border-b border-[#333333];
+  min-width: 0; /* Ensure flex container allows truncation */
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  width: 100%;
+}
+
+.news-id {
+  @apply mr-1 font-bold;
+  min-width: 1.5rem; /* Ensure consistent width */
+}
+
+.news-title {
+  @apply truncate;
+  min-width: 0; /* Required for truncation to work */
+}
+
+.news-provider {
+  @apply text-center text-[#4F94CD] font-bold mr-2;
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+.news-time {
+  @apply text-right text-[#999999];
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+.news-region {
+  @apply mr-2;
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+.news-metadata {
+  @apply flex items-center ml-2;
+  min-width: max-content; /* Ensure metadata takes necessary space */
+  justify-self: end; /* Align to end of grid cell */
+}
+
+.filter-item {
+  @apply py-1 px-3 hover:bg-[#1a1a1a] cursor-pointer leading-tight tracking-tight;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-bottom: 0; /* Remove spacing between items */
+}
+
+/* Responsive sidebar */
+@media (max-width: 768px) {
+  .sidebar-container {
+    @apply absolute z-10;
+  }
+}
+
+/* News details container */
+.news-details-container {
+  @apply border-t border-[#FFBF00] bg-black overflow-y-auto;
+  height: 40vh;
+  min-height: 300px;
+  max-height: 40vh;
+  display: block !important;
+  z-index: 50;
+}
+
+/* Make sidebar lists dynamic height without fixed height constraints */
+.filter-sidebar-list {
+  @apply overflow-y-auto;
+  padding-bottom: 10px; /* Add space at the bottom of each list */
+  /* No max-height to allow dynamic sizing */
+}
+
+/* News list with details view */
+.news-list-with-details {
+  height: calc(60vh - 40px);
+  max-height: calc(60vh - 40px);
+}
+
+.news-details-wrapper {
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.news-details-title {
+  @apply text-[#F5F5F5] font-bold border-b border-[#333] pb-1 mb-2;
+}
+
+.news-details-description {
+  @apply text-[#FFBF00] my-2;
+}
+
+.news-details-content {
+  @apply text-[#CCCCCC] border-t border-[#333] pt-2 mt-2;
+}

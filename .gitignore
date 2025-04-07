@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+server/public/
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# Bundlers and tools cache
+.cache/
+.parcel-cache/
+.rollup.cache/
+.webpack/
+vite.config.ts.*
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE and editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Replit specific files
+.replit/
+.local/
+.config/
+.breakpoints
+replit.nix
+.replit.backup
+.upm/
+
+# Project specific
+data/
+*.tar.gz
