@@ -70,3 +70,7 @@ replit.nix
 # Project specific
 data/
 *.tar.gz
+
+# Deployment and local configuration files
+auto-deploy.sh
+compose.yaml

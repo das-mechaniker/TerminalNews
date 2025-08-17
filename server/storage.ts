@@ -69,9 +69,13 @@ export class MemStorage implements IStorage {
   private initializeRssFeeds() {
     // These are from the provided CSV file
     const defaultFeeds = [
-      { url: "https://feeds.a.dj.com/rss/RSSMarketsMain.xml", provider: "WSJ" },
-      { url: "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml", provider: "WSJ" },
-      { url: "https://feeds.a.dj.com/rss/RSSWorldNews.xml", provider: "WSJ" },
+      { url: "https://feeds.content.dowjones.io/public/rss/RSSWorldNews", provider: "WSJ" },
+      { url: "https://feeds.content.dowjones.io/public/rss/WSJcomUSBusiness", provider: "WSJ" },
+      { url: "https://feeds.content.dowjones.io/public/rss/RSSMarketsMain", provider: "WSJ" },
+      { url: "https://feeds.content.dowjones.io/public/rss/RSSWSJD", provider: "WSJ" },
+      { url: "https://feeds.content.dowjones.io/public/rss/RSSUSnews", provider: "WSJ" },
+      { url: "https://feeds.content.dowjones.io/public/rss/socialpoliticsfeed", provider: "WSJ" },
+      { url: "https://feeds.content.dowjones.io/public/rss/socialeconomyfeed", provider: "WSJ" },
       { url: "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml", provider: "NYT" },
       { url: "https://rss.nytimes.com/services/xml/rss/nyt/Dealbook.xml", provider: "NYT" },
       { url: "https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJdEVhZXw==&_gl=1*1ffo59h*_ga*MTM1NjEyMzA0My4xNzAyMzk0NTEz*_ga_ZQWF70T3FK*MTcwMzAxODA2NS4yLjEuMTcwMzAxODExMC4xNS4wLjA.", provider: "BW" },

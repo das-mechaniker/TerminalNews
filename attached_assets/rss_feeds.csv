@@ -1,7 +1,11 @@
 ﻿url,provider
-https://feeds.a.dj.com/rss/RSSMarketsMain.xml,WSJ
-https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml,WSJ
-https://feeds.a.dj.com/rss/RSSWorldNews.xml,WSJ
+https://feeds.content.dowjones.io/public/rss/RSSWorldNews,WSJ
+https://feeds.content.dowjones.io/public/rss/WSJcomUSBusiness,WSJ
+https://feeds.content.dowjones.io/public/rss/RSSMarketsMain,WSJ
+https://feeds.content.dowjones.io/public/rss/RSSWSJD,WSJ
+https://feeds.content.dowjones.io/public/rss/RSSUSnews,WSJ
+https://feeds.content.dowjones.io/public/rss/socialpoliticsfeed,WSJ
+https://feeds.content.dowjones.io/public/rss/socialeconomyfeed,WSJ
 https://rss.nytimes.com/services/xml/rss/nyt/Business.xml,NYT
 https://rss.nytimes.com/services/xml/rss/nyt/Dealbook.xml,NYT
 https://feed.businesswire.com/rss/home/?rss=G1QFDERJXkJdEVhZXw==&_gl=1*1ffo59h*_ga*MTM1NjEyMzA0My4xNzAyMzk0NTEz*_ga_ZQWF70T3FK*MTcwMzAxODA2NS4yLjEuMTcwMzAxODExMC4xNS4wLjA.,BW
