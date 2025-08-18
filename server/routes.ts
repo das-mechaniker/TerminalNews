@@ -4,6 +4,22 @@ import { storage } from "./storage";
 import { startNewsUpdateService, getLatestNews, getTopRankedNews, getNewsDetails, getFilteredNews } from "./services/newsService";
 import { z } from "zod";
 
+const newsQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(1000).default(100),
+  offset: z.coerce.number().int().min(0).default(0),
+});
+
+const topNewsQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(1000).default(10),
+});
+
+const filteredNewsQuerySchema = z.object({
+  provider: z.string().optional(),
+  category: z.string().optional(),
+  region: z.string().optional(),
+  limit: z.coerce.number().int().min(1).max(1000).default(100),
+});
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Start the news update service when the server starts
   startNewsUpdateService();
@@ -22,9 +38,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get all news items (with pagination)
   app.get("/api/news", async (req: Request, res: Response) => {
     try {
-      const limit = req.query.limit ? parseInt(req.query.limit as string) : 100;
-      const offset = req.query.offset ? parseInt(req.query.offset as string) : 0;
-      
+      const parsed = newsQuerySchema.safeParse(req.query);
+      if (!parsed.success) {
+        return res.status(400).json({ message: parsed.error.message });
+      }
+      const { limit, offset } = parsed.data;
+
       const news = await storage.getNewsItems(limit, offset);
       
       // Debug: Log unique providers in the API response
@@ -41,7 +60,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get top ranked news
   app.get("/api/news/top", async (req: Request, res: Response) => {
     try {
-      const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+      const parsed = topNewsQuerySchema.safeParse(req.query);
+      if (!parsed.success) {
+        return res.status(400).json({ message: parsed.error.message });
+      }
+      const { limit } = parsed.data;
       const topNews = await getTopRankedNews(limit);
       res.json(topNews);
     } catch (error) {
@@ -53,16 +76,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get filtered news
   app.get("/api/news/filter", async (req: Request, res: Response) => {
     try {
-      const { provider, category, region } = req.query;
-      const limit = req.query.limit ? parseInt(req.query.limit as string) : 100;
-      
+      const parsed = filteredNewsQuerySchema.safeParse(req.query);
+      if (!parsed.success) {
+        return res.status(400).json({ message: parsed.error.message });
+      }
+      const { provider, category, region, limit } = parsed.data;
+
       const filteredNews = await getFilteredNews({
-        provider: provider as string | undefined,
-        category: category as string | undefined,
-        region: region as string | undefined,
-        limit
+        provider,
+        category,
+        region,
+        limit,
       });
-      
+
       res.json(filteredNews);
     } catch (error) {
       console.error("Error fetching filtered news:", error);
