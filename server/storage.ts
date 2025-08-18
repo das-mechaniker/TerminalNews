@@ -72,7 +72,7 @@ export class MemStorage implements IStorage {
       { url: "https://seekingalpha.com/tag/editors-picks.xml", provider: "SA" },
       { url: "https://seekingalpha.com/author/fund-letters.xml", provider: "HFL" },
       { url: "https://www.economist.com/finance-and-economics/rss.xml", provider: "ECONOMIST" },
-      { url: "https://briefing-feed-worker.kourosh-autorag.workers.dev/atom", provider: "BRIEFING" },
+      { url: "https://briefing-feed-worker.kourosh-autorag.workers.dev/rss2", provider: "BRIEFING" },
       { url: "https://feeds.content.dowjones.io/public/rss/RSSWorldNews", provider: "WSJ" },
       { url: "https://feeds.content.dowjones.io/public/rss/WSJcomUSBusiness", provider: "WSJ" },
       { url: "https://feeds.content.dowjones.io/public/rss/RSSMarketsMain", provider: "WSJ" },
