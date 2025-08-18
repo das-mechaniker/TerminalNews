@@ -2,11 +2,14 @@ import React from 'react';
 import { useNewsItem } from '@/hooks/useNews';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn, formatDate, getRegionColor, getRegionDisplayName } from '@/lib/utils';
+import DOMPurify from 'dompurify';
 
 interface NewsDetailsProps {
   selectedItemId: number | null;
   className?: string;
 }
+
+export const sanitizeHtml = (html: string) => DOMPurify.sanitize(html);
 
 const NewsDetails: React.FC<NewsDetailsProps> = ({ selectedItemId, className }) => {
   console.log("NewsDetails rendered with selectedItemId:", selectedItemId);
@@ -61,11 +64,9 @@ const NewsDetails: React.FC<NewsDetailsProps> = ({ selectedItemId, className }) 
     );
   }
 
-  // Create a safe HTML content with sanitized HTML
-  const createMarkup = (html: string) => {
-    // In a real app, you would use a library like DOMPurify to sanitize HTML
-    return { __html: html };
-  };
+  // Sanitize HTML content before rendering
+  const sanitizedContent = newsItem?.content ? sanitizeHtml(newsItem.content) : '';
+  const createMarkup = (html: string) => ({ __html: html });
 
   return (
     <div className={cn("news-details-container", className)}>
@@ -128,9 +129,9 @@ const NewsDetails: React.FC<NewsDetailsProps> = ({ selectedItemId, className }) 
           </div>
           
           {/* Content (if available) */}
-          {newsItem?.content && (
+          {sanitizedContent && (
             <div className="news-details-content">
-              <div className="leading-tight" dangerouslySetInnerHTML={createMarkup(newsItem.content)} />
+              <div className="leading-tight" dangerouslySetInnerHTML={createMarkup(sanitizedContent)} />
             </div>
           )}
         </div>
