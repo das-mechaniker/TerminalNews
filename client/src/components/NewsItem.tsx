@@ -12,9 +12,34 @@ interface NewsItemProps {
 }
 
 const NewsItem: React.FC<NewsItemProps> = ({ item, index, isSelected, onClick }) => {
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    // Check if Command key (Mac) or Ctrl key (Windows/Linux) is pressed
+    if (e.metaKey || e.ctrlKey) {
+      // Open the news source link in a new tab
+      if (item.link) {
+        window.open(item.link, '_blank', 'noopener,noreferrer');
+      }
+      return;
+    }
+    
     console.log("NewsItem clicked:", item.id, item.title);
     onClick(item);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    // Handle Enter and Space key presses
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      // Check if Command key (Mac) or Ctrl key (Windows/Linux) is pressed
+      if (e.metaKey || e.ctrlKey) {
+        // Open the news source link in a new tab
+        if (item.link) {
+          window.open(item.link, '_blank', 'noopener,noreferrer');
+        }
+        return;
+      }
+      onClick(item);
+    }
   };
   
   // Determine if the item has been updated
@@ -28,6 +53,10 @@ const NewsItem: React.FC<NewsItemProps> = ({ item, index, isSelected, onClick })
         isSelected && "border-l-2 border-l-[#FFBF00]"
       )}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="button"
+      aria-label={`News item: ${item.title}. Command+Click to open in new tab.`}
     >
       <div className="news-id text-[#FFBF00]">
         {index})

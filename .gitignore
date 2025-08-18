@@ -72,5 +72,6 @@ data/
 *.tar.gz
 
 # Deployment and local configuration files
-auto-deploy.sh
-compose.yaml
+.sh
+.yaml
+.code-workspace
