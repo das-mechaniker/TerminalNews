@@ -14,6 +14,9 @@ A modern, real-time news aggregation service that collects, processes, and serve
 
 *A terminal-inspired news reader with real-time updates, filter options, and modern UI.*
 
+## Docker
+./auto-deploy.sh -d kousha789123 -r ghcr.io
+
 ## Features
 
 - ⚡ Real-time news aggregation from multiple trusted sources
