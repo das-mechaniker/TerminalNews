@@ -102,12 +102,36 @@ export async function fetchAndParseRSSFeed(feed: RssFeed): Promise<InsertNewsIte
       let category = 'general';
       if (item.category) {
         if (Array.isArray(item.category)) {
-          category = item.category[0];
-        } else if (typeof item.category === 'object' && item.category._) {
-          category = item.category._;
-        } else {
+          // Handle array of categories - take the first one that's a string
+          for (const cat of item.category) {
+            if (typeof cat === 'string') {
+              category = cat;
+              break;
+            }
+            if (typeof cat === 'object' && cat._) {
+              category = cat._;
+              break;
+            }
+          }
+        } else if (typeof item.category === 'object') {
+          // Handle object with _ property (XML parsing artifacts)
+          if (item.category._) {
+            category = item.category._;
+          } else if (item.category['#text']) {
+            category = item.category['#text'];
+          } else {
+            // Try to extract text content from object
+            category = String(item.category).replace(/^\[object Object\]$/, 'general');
+          }
+        } else if (typeof item.category === 'string') {
           category = item.category;
         }
+      }
+      
+      // Ensure category is a string and clean it up
+      if (typeof category !== 'string') {
+        console.log('Category is not a string:', category, 'for item:', item.title);
+        category = 'general';
       }
 
       // Simple sentiment analysis (basic implementation)
