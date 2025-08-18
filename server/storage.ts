@@ -69,6 +69,10 @@ export class MemStorage implements IStorage {
   private initializeRssFeeds() {
     // These are from the provided CSV file
     const defaultFeeds = [
+      { url: "https://seekingalpha.com/tag/editors-picks.xml", provider: "SA" },
+      { url: "https://seekingalpha.com/author/fund-letters.xml", provider: "HFL" },
+      { url: "https://www.economist.com/finance-and-economics/rss.xml", provider: "ECONOMIST" },
+      { url: "https://briefing-feed-worker.kourosh-autorag.workers.dev/atom", provider: "BRIEFING" },
       { url: "https://feeds.content.dowjones.io/public/rss/RSSWorldNews", provider: "WSJ" },
       { url: "https://feeds.content.dowjones.io/public/rss/WSJcomUSBusiness", provider: "WSJ" },
       { url: "https://feeds.content.dowjones.io/public/rss/RSSMarketsMain", provider: "WSJ" },
@@ -96,10 +100,8 @@ export class MemStorage implements IStorage {
       { url: "https://www.yahoo.com/news/rss", provider: "YHOO" },
       { url: "https://api.axios.com/feed/", provider: "AXIO" },
       { url: "http://rssfeeds.usatoday.com/UsatodaycomNation-TopStories", provider: "UST" },
-      { url: "https://www.wired.com/feed/category/business/latest/rss", provider: "WIRD" },
-      { url: "https://www.wired.com/feed/rss", provider: "WIRD" },
-      { url: "https://www.stamfordadvocate.com/rss/feed/News-1443.php", provider: "ADV" },
-      { url: "https://www.feedspot.com/infiniterss.php?_src=followbtn&followfeedid=5512211&q=site:", provider: "LOCL" }
+      { url: "https://www.wired.com/feed/category/business/latest/rss", provider: "WIRED" },
+      { url: "https://www.wired.com/feed/rss", provider: "WIRED" }
     ];
 
     defaultFeeds.forEach(feed => {
