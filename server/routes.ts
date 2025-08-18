@@ -28,7 +28,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const news = await storage.getNewsItems(limit, offset);
       
       // Debug: Log unique providers in the API response
-      const uniqueProviders = [...new Set(news.map(item => item.provider))].sort();
+      const uniqueProviders = Array.from(new Set(news.map(item => item.provider))).sort();
       console.log("API: Returning news with providers:", uniqueProviders);
       
       res.json(news);
