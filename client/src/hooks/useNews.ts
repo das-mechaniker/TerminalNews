@@ -5,16 +5,28 @@ import { apiRequest } from "@/lib/queryClient";
 
 // Hook for fetching all news
 export function useAllNews(limit: number = 100) {
+  const url = `/api/news?limit=${limit}`;
   return useQuery<NewsItem[]>({
-    queryKey: ["/api/news", limit],
+    queryKey: [url],
+    queryFn: async () => {
+      const res = await fetch(url, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch news");
+      return res.json();
+    },
     refetchInterval: 60000, // Refetch every minute
   });
 }
 
 // Hook for fetching top ranked news
 export function useTopNews(limit: number = 10) {
+  const url = `/api/news/top?limit=${limit}`;
   return useQuery<NewsItem[]>({
-    queryKey: ["/api/news/top", limit],
+    queryKey: [url],
+    queryFn: async () => {
+      const res = await fetch(url, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch top news");
+      return res.json();
+    },
     refetchInterval: 60000, // Refetch every minute
   });
 }
@@ -74,9 +86,11 @@ export function useRefreshNews() {
     },
     onSuccess: () => {
       // Invalidate all news queries to refresh the data
-      queryClient.invalidateQueries({ queryKey: ["/api/news"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/news/top"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/news/filter"] });
+      queryClient.invalidateQueries({
+        predicate: (query) =>
+          typeof query.queryKey[0] === "string" &&
+          query.queryKey[0].startsWith("/api/news"),
+      });
     },
   });
 }
