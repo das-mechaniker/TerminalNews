@@ -1,0 +1,12 @@
+services:
+  terminalnews:
+    image: ghcr.io/kousha789123/terminalnews:latest
+    build: .
+    ports:
+      - 5000:5000
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    volumes:
+      - /mnt/homserver-nas/misc/terminalnews:/app/data
+networks: {}
