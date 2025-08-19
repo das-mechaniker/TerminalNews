@@ -72,4 +72,4 @@ data/
 *.tar.gz
 
 # Deployment and local configuration files
-.code-workspace
+*.code-workspace
