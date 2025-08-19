@@ -66,7 +66,22 @@ const NewsDetails: React.FC<NewsDetailsProps> = ({ selectedItemId, className }) 
 
   // Sanitize HTML content before rendering
   const sanitizedContent = newsItem?.content ? sanitizeHtml(newsItem.content) : '';
+  const sanitizedDescription = newsItem?.description ? sanitizeHtml(newsItem.description) : '';
   const createMarkup = (html: string) => ({ __html: html });
+
+  // Smart content selection: prefer content over description, but avoid duplication
+  const hasContent = sanitizedContent && sanitizedContent.trim().length > 0;
+  const hasDescription = sanitizedDescription && sanitizedDescription.trim().length > 0;
+  
+  // Check if description and content are essentially the same (strip HTML and compare)
+  const descriptionText = sanitizedDescription.replace(/<[^>]*>/g, '').trim();
+  const contentText = sanitizedContent.replace(/<[^>]*>/g, '').trim();
+  const areContentsSimilar = descriptionText && contentText && 
+    (descriptionText === contentText || contentText.includes(descriptionText));
+
+  // Display logic: show content if available, otherwise description, but not both if similar
+  const shouldShowContent = hasContent;
+  const shouldShowDescription = hasDescription && !areContentsSimilar && !hasContent;
 
   return (
     <div className={cn("news-details-container", className)}>
@@ -105,8 +120,11 @@ const NewsDetails: React.FC<NewsDetailsProps> = ({ selectedItemId, className }) 
         <div>
           <h2 className="news-details-title">{newsItem?.title}</h2>
           
-          {newsItem?.description && (
-            <p className="news-details-description">{newsItem.description}</p>
+          {/* Show description only if there's no content or they're different */}
+          {shouldShowDescription && (
+            <div className="news-details-description">
+              <div className="leading-tight" dangerouslySetInnerHTML={createMarkup(sanitizedDescription)} />
+            </div>
           )}
           
           {/* Source information */}
@@ -128,8 +146,8 @@ const NewsDetails: React.FC<NewsDetailsProps> = ({ selectedItemId, className }) 
             )}
           </div>
           
-          {/* Content (if available) */}
-          {sanitizedContent && (
+          {/* Content (prefer this over description) */}
+          {shouldShowContent && (
             <div className="news-details-content">
               <div className="leading-tight" dangerouslySetInnerHTML={createMarkup(sanitizedContent)} />
             </div>
