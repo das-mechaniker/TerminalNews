@@ -8,5 +8,6 @@ services:
       - NODE_ENV=production
     restart: unless-stopped
     volumes:
-      - /mnt/homserver-nas/misc/terminalnews:/app/data
+      #- /mnt/homserver-nas/misc/terminalnews:/app/data
+      - ./data:/app/data
 networks: {}

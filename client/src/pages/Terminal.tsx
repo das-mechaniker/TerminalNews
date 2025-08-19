@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import FilterSidebar from '@/components/FilterSidebar';
 import NewsContent from '@/components/NewsContent';
-import { useAllNews, useAutoRefresh } from '@/hooks/useNews';
+import { useAllNews, useAutoRefresh, useInitialLoad } from '@/hooks/useNews';
 import { Filter } from '@/lib/types';
 import { extractCategories, extractProviders, extractRegions } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -12,7 +12,8 @@ const Terminal: React.FC = () => {
   const [filter, setFilter] = useState<Filter>({});
   const [isSidebarVisible, setSidebarVisible] = useState(true);
   const { data: allNews, isLoading } = useAllNews();
-  const { refresh } = useAutoRefresh(60);
+  const { refresh } = useAutoRefresh(60); // Database-only auto-refresh every 60s
+  useInitialLoad(); // Load from DB first, then trigger background RSS fetch
   const { toast } = useToast();
   const isMobile = useIsMobile();
 
@@ -57,16 +58,6 @@ const Terminal: React.FC = () => {
       setSidebarVisible(false);
     }
   }, [isMobile]);
-
-  // Handle manual refresh
-  const handleRefresh = () => {
-    refresh();
-    toast({
-      title: "Refreshing News",
-      description: "Fetching the latest news updates...",
-      duration: 3000,
-    });
-  };
 
   return (
     <div className="flex flex-col h-screen bg-black text-[#FFBF00]">

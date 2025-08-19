@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { NewsItem, Filter, RefreshInterval } from "@/lib/types";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { apiRequest } from "@/lib/queryClient";
 
 // Hook for fetching all news
@@ -95,28 +95,56 @@ export function useRefreshNews() {
   });
 }
 
-// Hook for auto-refresh with configurable interval
+// Hook for auto-refresh with configurable interval (database queries only, no RSS fetching)
 export function useAutoRefresh(initialInterval: RefreshInterval = 60) {
   const [interval, setInterval] = useState<RefreshInterval>(initialInterval);
-  const { mutate: refreshNews } = useRefreshNews();
+  const queryClient = useQueryClient();
   
+  // Database-only refresh - just invalidate cache to refetch from database
   const refresh = useCallback(() => {
-    refreshNews();
-  }, [refreshNews]);
+    queryClient.invalidateQueries({
+      predicate: (query) =>
+        typeof query.queryKey[0] === "string" &&
+        query.queryKey[0].startsWith("/api/news") &&
+        !query.queryKey[0].includes("/api/news/refresh"), // Exclude refresh endpoint
+    });
+  }, [queryClient]);
   
   useEffect(() => {
-    // Define a function to call refresh
-    const handleRefresh = () => {
-      refresh();
-    };
-    
     // Use global window object to set interval
-    // TypeScript in Node.js environment would use NodeJS.Timeout
-    // but in browser environment we use number for interval IDs
-    const intervalId: number = window.setInterval(handleRefresh, interval * 1000);
+    const intervalId: number = window.setInterval(refresh, interval * 1000);
     
     return () => window.clearInterval(intervalId);
   }, [interval, refresh]);
   
   return { interval, setInterval, refresh };
+}
+
+// Hook for initial page load: load from DB first, then trigger RSS fetch in background
+export function useInitialLoad() {
+  const queryClient = useQueryClient();
+  const { mutate: refreshNews } = useRefreshNews();
+  
+  useEffect(() => {
+    // On initial load, trigger a background RSS fetch after a short delay
+    // This allows the initial DB queries to load first for fast UI
+    const timer = setTimeout(() => {
+      refreshNews(undefined, {
+        onSuccess: () => {
+          // After RSS fetch completes, invalidate queries to show fresh data
+          queryClient.invalidateQueries({
+            predicate: (query) =>
+              typeof query.queryKey[0] === "string" &&
+              query.queryKey[0].startsWith("/api/news") &&
+              !query.queryKey[0].includes("/api/news/refresh"),
+          });
+        },
+        onError: (error) => {
+          console.error('Background RSS fetch failed:', error);
+        }
+      });
+    }, 1000); // 1 second delay to let initial DB queries complete
+
+    return () => clearTimeout(timer);
+  }, [queryClient, refreshNews]); // Include dependencies
 }
